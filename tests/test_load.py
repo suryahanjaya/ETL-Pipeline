@@ -40,26 +40,40 @@ class TestLoad(unittest.TestCase):
     @patch('utils.load.service_account.Credentials.from_service_account_file')
     @patch('utils.load.build')
     def test_save_to_google_sheets_success(self, mock_build, mock_creds):
-        """Test save to Google Sheets berhasil"""
-        # Mock Google Sheets service
+        """Test save to Google Sheets berhasil - FIXED VERSION"""
+        # Mock credentials
+        mock_creds_instance = Mock()
+        mock_creds.return_value = mock_creds_instance
+        
+        # Mock service dengan rantai pemanggilan yang lengkap
         mock_service = Mock()
-        mock_spreadsheets = Mock()
-        mock_values = Mock()
-        mock_clear = Mock()
-        mock_update = Mock()
-        
         mock_build.return_value = mock_service
-        mock_service.spreadsheets.return_value = mock_spreadsheets
-        mock_spreadsheets.values.return_value = mock_values
-        mock_values.clear.return_value = mock_clear
-        mock_clear.execute.return_value = None
-        mock_values.update.return_value = mock_update
-        mock_update.execute.return_value = {'updatedCells': 10}
         
-        # Mock spreadsheet access
-        mock_service.spreadsheets.return_value.get.return_value.execute.return_value = {
-            'properties': {'title': 'Test Spreadsheet'}
-        }
+        # Mock untuk spreadsheets().get()
+        mock_get_request = Mock()
+        mock_get_execute = Mock(return_value={'properties': {'title': 'Test Spreadsheet'}})
+        mock_get_request.execute = mock_get_execute
+        mock_service.spreadsheets.return_value.get.return_value = mock_get_request
+        
+        # Mock untuk spreadsheets().values().clear()
+        mock_clear_request = Mock()
+        mock_clear_execute = Mock(return_value=None)
+        mock_clear_request.execute = mock_clear_execute
+        
+        # Mock untuk spreadsheets().values().update()
+        mock_update_request = Mock()
+        mock_update_execute = Mock(return_value={'updatedCells': 10})
+        mock_update_request.execute = mock_update_execute
+        
+        # Setup chain mock
+        mock_values_service = Mock()
+        mock_values_service.clear.return_value = mock_clear_request
+        mock_values_service.update.return_value = mock_update_request
+        
+        mock_spreadsheets_service = Mock()
+        mock_spreadsheets_service.values.return_value = mock_values_service
+        
+        mock_service.spreadsheets.return_value = mock_spreadsheets_service
         
         result = save_to_google_sheets(self.sample_data, 'test_spreadsheet_id')
         self.assertTrue(result)
@@ -80,7 +94,7 @@ class TestLoad(unittest.TestCase):
     @patch('utils.load.pd.DataFrame.to_sql')
     @patch('utils.load.create_engine')
     def test_save_to_postgresql_success(self, mock_engine, mock_to_sql):
-        """Test save to PostgreSQL berhasil - FIXED VERSION"""
+        """Test save to PostgreSQL berhasil"""
         # Mock engine dan koneksi
         mock_engine_instance = Mock()
         mock_engine.return_value = mock_engine_instance

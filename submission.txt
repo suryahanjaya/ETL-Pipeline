@@ -2,21 +2,24 @@
 
 ## Prerequisites:
 1. Python 3.7+
-2. Install dependencies: pip install -r requirements.txt
+2. Install dependencies: 
+   pip install -r requirements.txt
 
-## Untuk Google Sheets (Opsional):
+## Konfigurasi Khusus:
+
+### Untuk Google Sheets:
 1. Buat Google Sheets baru di: https://sheets.google.com
 2. Dapatkan Spreadsheet ID dari URL:
    Contoh: https://docs.google.com/spreadsheets/d/1c1BypuyfEBVxeA4YGZn_zqmCh_sgp6azqAtlpWatLl0/edit
    Spreadsheet ID: 1c1BypuyfEBVxeA4YGZn_zqmCh_sgp6azqAtlpWatLl0
 3. Download credentials JSON dari Google Cloud Console
 4. Rename file menjadi 'google-sheets-api.json' dan taruh di folder root
-5. Update SPREADSHEET_ID di main.py dengan ID Anda
+5. Update SPREADSHEET_ID di main.py dengan ID Anda (baris 65)
 
-## Untuk PostgreSQL (Opsional):
+### Untuk PostgreSQL (Opsional):
 1. Install PostgreSQL
 2. Buat database: createdb fashion_db
-3. Update connection string di main.py:
+3. Update connection string di main.py (baris 70):
    Format: postgresql://username:password@localhost:5432/fashion_db
 
 ## Menjalankan ETL:
@@ -24,16 +27,13 @@ python main.py
 
 # CARA MENJALANKAN UNIT TEST
 
-## Opsi 1: Jalankan semua test dengan pytest
+## Jalankan semua test:
 python -m pytest tests/ -v
 
-## Opsi 2: Jalankan test dengan coverage
+## Jalankan test dengan coverage:
 python -m pytest tests/ --cov=utils --cov-report=term --cov-report=html
 
-## Opsi 3: Gunakan script khusus
-python run_tests.py
-
-## Opsi 4: Jalankan test file tertentu
+## Jalankan test file tertentu:
 python -m pytest tests/test_extract.py -v
 python -m pytest tests/test_transform.py -v  
 python -m pytest tests/test_load.py -v
@@ -44,10 +44,14 @@ Setelah menjalankan test dengan coverage:
 1. Terminal report: lihat di console
 2. HTML report: buka file htmlcov/index.html di browser
 
-# URL GOOGLE SHEETS (Contoh - ganti dengan URL Anda)
+# URL GOOGLE SHEETS
 https://docs.google.com/spreadsheets/d/1c1BypuyfEBVxeA4YGZn_zqmCh_sgp6azqAtlpWatLl0
 
-# CATATAN PENTING:
-- Data AKAN SELALU tersimpan di products.csv (REQUIREMENT BASIC)
+# CATATAN PENTING
+
+- Pastikan file google-sheets-api.json ada di folder root (untuk Google Sheets)
+- Untuk PostgreSQL, sesuaikan connection string di main.py
+- Data akan selalu tersimpan di products.csv (Basic requirement)
 - Google Sheets dan PostgreSQL opsional untuk requirement Skilled/Advanced
-- Jika Google Sheets/PostgreSQL gagal, CSV tetap tersimpan dan submission VALID
+- Format URL scraping sudah diperbaiki: halaman1: /, halaman2+: /page2, /page3, dst
+- Semua test seharusnya pass setelah perbaikan mock Google Sheets

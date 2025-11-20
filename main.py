@@ -15,11 +15,11 @@ from utils.load import save_to_csv, save_to_google_sheets, save_to_postgresql, v
 
 def main():
     """
-    Main ETL Pipeline - FIXED VERSION
+    Main ETL Pipeline
     """
     print("Starting ETL Pipeline...")
     
-    # Configuration
+    # Configuration - URL sudah benar
     BASE_URL = "https://fashion-studio.dicoding.dev"
     START_PAGE = 1
     END_PAGE = 50
@@ -86,13 +86,13 @@ def main():
     # Save ke Google Sheets (Skilled requirement)
     print("\n2. Saving to Google Sheets...")
     # === GUNAKAN SPREADSHEET ID ANDA YANG SEBENARNYA ===
-    SPREADSHEET_ID = "1c1BypuyfEBVxeA4YGZn_zqmCh_sgp6azqAtlpWatLl0"  
+    SPREADSHEET_ID = "1c1BypuyfEBVxeA4YGZn_zqmCh_sgp6azqAtlpWatLl0"  # Ganti dengan ID Anda
     gsheet_success = save_to_google_sheets(df_clean, SPREADSHEET_ID)
     
     # Save ke PostgreSQL (Advanced requirement)  
     print("\n3. Saving to PostgreSQL...")
     # === GUNAKAN CONNECTION STRING YANG BENAR ===
-    POSTGRES_CONNECTION = "postgresql://postgres:OAPI%401811@localhost:5432/fashion_db"  
+    POSTGRES_CONNECTION = "postgresql://postgres:OAPI%401811@localhost:5432/fashion_db"  # Ganti dengan connection string Anda
     postgres_success = save_to_postgresql(df_clean, connection_string=POSTGRES_CONNECTION)
     
     # Summary

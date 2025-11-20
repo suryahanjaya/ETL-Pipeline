@@ -7,7 +7,7 @@ import re
 
 def scrape_main(base_url, start_page=1, end_page=50):
     """
-    Scrape data dari website Fashion Studio - FINAL FIXED VERSION
+    Scrape data dari website Fashion Studio - FIXED URL VERSION
     """
     products = []
     successful_pages = 0
@@ -15,7 +15,12 @@ def scrape_main(base_url, start_page=1, end_page=50):
     
     try:
         for page in range(start_page, end_page + 1):
-            url = f"{base_url}?page={page}"
+            # PERBAIKAN: Format URL yang benar sesuai petunjuk
+            if page == 1:
+                url = base_url  # https://fashion-studio.dicoding.dev/
+            else:
+                url = f"{base_url}/page{page}"  # https://fashion-studio.dicoding.dev/page2
+            
             print(f"Scraping page {page}: {url}")
             
             try:
